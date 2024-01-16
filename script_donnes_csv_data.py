@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 import os 
-
+import requests
 
 #############################################################################################
 #   READ ME 
@@ -43,6 +43,7 @@ DATABASE_NAME = 'base_de_donnee_air_test.db'
 
 # Si changement de fichier de sauvegarde, changer la variable global SAVE_NAME
 SAVE_NAME = 'fichier_save_name.csv'
+
 
 
 ##############################################################################################
@@ -203,6 +204,7 @@ def test_day(day, year, month):
     """ Définition du nom de fichier à télécharger """
     return f"save/FR_E2_{year}-{month:02d}-{day:02d}.csv"
 
+
 def tab_crea_auto(case, year, number_month, day_start):
     """ Création des noms pour l'automatisation de l'ajout des données dans les tables/bases de données """
     # tableau qui sauvegarde les noms des fichiers 
@@ -217,7 +219,8 @@ def tab_crea_auto(case, year, number_month, day_start):
         max_jours = 30
 
     if case == 1: 
-        return test_day(day_start, year, number_month)
+        name = test_day(day_start, year, number_month)
+        tab.append(name)
     elif case == 2: 
         for i in range(1, max_jours + 1):
             name = test_day(i, year, number_month)
@@ -296,7 +299,6 @@ def mesure_case_add(tab):
             couvertureDonnees, codeQualite, validite
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
-
     for csv_name in tab:
         # Sélectionner les données à partir du fichier CSV
         tab_mesure = selection(csv_name, 1)
@@ -405,6 +407,10 @@ def zas_case_add(tab):
     conn.commit()
     conn.close()
 
+def case_add(tab):
+    # # Étape 1: Connexion à la base de données
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
 
 #############################################################################################
     ### Different cas : ##### 1 = 1 jour ##### 2 = 1 mois ##### 3 = 7 jours ##
@@ -419,6 +425,46 @@ def all_table_add(case, year, month, day):
     polluant_case_add(tab)
     site_case_add(tab)
     zas_case_add(tab)
+
+    delete_file()
+
+
+##############################################################################################
+# supprésion des fichiers sur l'ordinateur présent dans la bdd
+##############################################################################################
+
+
+def delete_file():
+
+    try:
+        # Liste tous les fichiers dans le répertoire
+        files = os.listdir('save')
+
+        for file_name in files:
+            try:
+                # Construction du chemin complet du fichier
+                file_path = os.path.join('save', file_name)
+
+                # Vérification si le chemin est un fichier (et non un sous-répertoire)
+                if os.path.isfile(file_path):
+                    # Suppression du fichier
+                    os.remove(file_path)
+                    print(f"Fichier {file_name} supprimé avec succès.")
+                else:
+                    print(f"{file_name} n'est pas un fichier et n'a pas été supprimé.")
+            except Exception as e:
+                print(f"Erreur lors de la suppression du fichier {file_name}: {str(e)}")
+
+        print("Suppression des fichiers terminée.")
+    except Exception as e:
+        print(f"Erreur lors de la récupération de la liste des fichiers : {str(e)}")
+
+
+
+
+
+
+
 
 ##############################################################################################
 # Requete pour verifier si les données sont présentent dans la bdd    
@@ -484,8 +530,10 @@ if __name__ == '__main__':
     mois = 12
     jour = 1
     
-    all_table_add(choix, annee, mois, jour)
-
+    #all_table_add(choix, annee, mois, jour)
+    #tab = tab_crea_auto(1, annee, mois, jour)
+    
 
     # verification    
-    affiche_mesure_bdd()
+    #affiche_mesure_bdd()
+    
