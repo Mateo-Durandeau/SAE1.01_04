@@ -1,7 +1,8 @@
 import requests
 
+
 def years(years):
-    """ Définition du chemin par rapport au mois en argument """
+    """ Définition du chemin par rapport à l'année en argument pour gerer les données inferieurs à 2021 en bonus """
 
     url_final = ""
 
@@ -16,7 +17,14 @@ def years(years):
     
     return url_final
 
-
+def test_sav():
+    url_base = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2023/"
+    file_name = "FR_E2_2023-01-01.csv"
+    # Téléchargement du fichier
+    url_file = url_base + file_name
+    response = requests.get(url_file)
+    if response.status_code == 200:
+        return response.content
 
 def test_day(day, year, month):
     """
@@ -39,7 +47,7 @@ def request_download_choice(file_name, name_path_save, year):
     url_file = url_base_final + file_name
 
     response = requests.get(url_file)
-    
+
     if response.status_code == 200:
         # Mode d'ouverture 'wb' pour écrire en binaire
         with open(name_path_save, 'wb') as fichier:
@@ -122,15 +130,6 @@ def month_download(annee, number_month):
         url_file = url_base_final + file_name
         request_download_simple_file(url_file, save_name)
         jour += 1
-
-
-#gourmant en ressource et non complet 
-#def year_download(annee):
-    #for i in range(12):
-        #month_download(annee, i)
-
-
- 
    
 
 if __name__ == '__main__':
@@ -140,3 +139,4 @@ if __name__ == '__main__':
     #month_download(2023, 12)
     #download_week(2023, 1, 1)
     download_day(2023, 5, 3)
+    
