@@ -117,7 +117,7 @@ def month_download(annee, number_month):
     #definition du nombre de jour 
     if number_month == 2: 
         max_jours = 28
-    elif (number_month % 2) != 0:
+    elif number_month in [1, 3, 5, 7, 8, 10, 12]:
         max_jours = 31
     else:
         max_jours = 30
