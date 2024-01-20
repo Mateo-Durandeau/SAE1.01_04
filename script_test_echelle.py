@@ -4,6 +4,13 @@ import script_requete_download_http
 
 import sqlite3
 
+
+####
+#
+#   Ce script effectue des testes de perfomances sur l'ajout de données dans la base de données
+#
+####
+
 def delete_all_data(database_name):
     try:
         # Connexion à la base de données
