@@ -3,6 +3,13 @@ import sqlite3
 from datetime import datetime
 import os 
 
+
+####
+#
+#   Ce fichier ajout des données dans la base de données GEOD'AIR avec plusieurs fonctionnalité 
+#
+####
+
 ##############################################################################################
 # Variable global || Si changement ne pas oublier de supprimer les anciennes données créee
 ##############################################################################################
@@ -86,8 +93,8 @@ def types_tuples_mesure(table_final):
     typed_table = []
 
     for elements in table_final:
+
         debut = str(elements[0])
-        
         fin = str(elements[1])
         # transformation des types des dates au format iso 8601
         debut = datetime.strptime(debut, '%Y/%m/%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
@@ -95,7 +102,6 @@ def types_tuples_mesure(table_final):
 
         valeur = float(elements[9]) if elements[9] else 0.0
         valeur_brute = float(elements[10]) if elements[10] else 0.0
-
         if valeur <= 0.0:
             valeur = 0.01
         if valeur_brute <= 0.0: 
