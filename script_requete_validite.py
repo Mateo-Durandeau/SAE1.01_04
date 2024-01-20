@@ -2,10 +2,15 @@ import sqlite3
 import pandas as pd
 
 
+####
+#
+#   Ce fichier fais des requêtes sur la base de données pour vérifier sa validité (possède aussi des requètes utiles)
+#
+####
+
 DATABASE_NAME = 'base_de_donnee_air_test.db'
 
 # fonction requete verification.
-
 def affiche_data_bdd():
     # Étape 1: Connexion à la base de données
     conn = sqlite3.connect(DATABASE_NAME)
@@ -253,11 +258,7 @@ def apply_filters():
         conn.close()
 
 
-def test_scenario():
-    extract_statistics()
-    group_by_organisme()
-    apply_filters()
 
 if __name__ == "__main__":
-    test_scenario()
+    pass
     
