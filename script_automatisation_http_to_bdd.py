@@ -6,6 +6,12 @@ import script_requete_download_http
 ######################################################################
 #
 #           # READ ME
+#   lancer la fonction choix avec le cas choisis et les paramètres de la date
+#   lancer la fonctoi choix_v2 avec une boucle qui s'incrémente en jour pour télécharger un mois plus rapidement
+#
+#   CASE :  1 = 1 jour 
+#           2 = 1 mois
+#           3 = 1 semaine
 #
 ######################################################################
 
@@ -34,10 +40,15 @@ if __name__=='__main__':
     nombre_jour = 1
 
     case = 1
-
-    year = 2024
+    year = 2021
     month = 1
     day = 1
-
+    
+    for i in range(11):
+        #choix(case, year, month, day)
+        month += 1
+    month = 1
     choix(case, year, month, day)
+
+
     #choix_v2(nombre_jour, year, month, day)
