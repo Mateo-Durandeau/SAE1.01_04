@@ -2,22 +2,12 @@ import requests
 
 
 def years(years):
-    """ Définition du chemin par rapport à l'année en argument pour gerer les données inferieurs à 2021 en bonus """
-
-    url_final = ""
-
-    if (years == 2024):
-        url_final = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2024/"
-    elif (years == 2023):
-        url_final = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2023/"
-    elif (years == 2022):
-        url_final = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2022/"
-    elif (years == 2021):
-        url_final = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2021/"
-    
+    """ Créer le chemin de l'url 1 par rapport à l'annnée """
+    url_final = f"https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/{years}/"
     return url_final
 
 def test_sav():
+    """ Fonction test de sauvegarde d'un fichier """
     url_base = "https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/2023/"
     file_name = "FR_E2_2023-01-01.csv"
     # Téléchargement du fichier
@@ -27,17 +17,13 @@ def test_sav():
         return response.content
 
 def test_day(day, year, month):
-    """
-    Créer le chemin de sauvegarde et pour l'accès des données 
-    Il y a juste besoin d'incrémenter dans une boucle les arguments pour une automatisation 
-    """
-
+    """ Créer l'url 2 par rapport à l'année, mois et jour"""
     return f"FR_E2_{year}-{month:02d}-{day:02d}.csv"
 
 
 def request_download_choice(file_name, name_path_save, year):
     """
-    Défini un telechargement pour une journée de données juste avec le nom 
+    Défini un telechargement pour une journée de données par rapport au nom
     """
     
     #choix de l'année
@@ -88,7 +74,7 @@ def download_day(year, month, day):
 
 def download_week(year, month, day_start):
     """
-    Téléchargement de toute les données sur 1 semaines en partant d'un jour choisis
+    Téléchargement de toutes les données sur 1 semaines en partant d'un jour choisis
     Gère les erreurs de dépassement de mois 
     """
 
@@ -138,5 +124,7 @@ if __name__ == '__main__':
 
     #month_download(2023, 12)
     #download_week(2023, 1, 1)
-    download_day(2023, 5, 3)
+    #download_day(2023, 5, 3)
+    a = test_sav()
+    print(a)
     
