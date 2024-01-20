@@ -1,6 +1,13 @@
 import sqlite3
 import pandas as pd
 
+
+####
+#
+#   Ce fichier fais des requêtes sur la base de données pour vérifier sa validité.
+#
+####
+
 DATABASE_NAME = 'base_de_donnee_air_test.db'
 
 def get_day_year_avg():
@@ -45,6 +52,7 @@ def get_mesure_details_by_polluant(variable_mesure, nom_polluant):
             WHERE Mesure.valeur > {variable_mesure}
             AND Polluant.nomPolluant = '{nom_polluant}'
             ORDER BY Mesure.valeur DESC
+            LIMIT 5
         '''
         df_mesure_details = pd.read_sql_query(query_mesure_details, conn)
         
@@ -137,7 +145,7 @@ simuler_scenario('NO2', 'FR01011', '2022-01-01 00:00:00', '2022-01-01 23:59:59')
 stap_mesure = 250
 polluant = 'NO'
 
-#get_day_year_avg()
-#get_mesure_details_by_polluant(stap_mesure, polluant)
+get_day_year_avg()
+get_mesure_details_by_polluant(stap_mesure, polluant)
 #max_day()
 
