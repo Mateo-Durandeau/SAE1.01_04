@@ -1,61 +1,71 @@
+# database_manager.py
+
 import sqlite3
 import pandas as pd
-from datetime import datetime
 
-DATABASE_NAME = 'base_de_donnee_air_test.db'
+####
+#
+#   Ce fichier fais des requêtes pour faire des testes sur la bdd
+#
+####
 
-def all_table_add(case, year, month, day):
-    conn = sqlite3.connect(DATABASE_NAME)
-    try:
-        # Supposons que vous avez une logique d'ajout de données ici
-        # Je vais simplement insérer quelques données de démonstration
-        # Adaptez cela en fonction de votre logique réelle
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO Site VALUES (?, ?, ?, ?, ?)', ('Site001', 'NomSite1', 'Implantation1', 'Influence1', 'Zas001'))
-        cursor.execute('INSERT INTO Zas VALUES (?, ?, ?)', ('Zas001', 'NomZas1', 'Organisme1'))
-        cursor.execute('INSERT INTO Organisme VALUES (?)', ('Organisme1',))
-        cursor.execute('INSERT INTO Polluant VALUES (?)', ('NO2',))
-        cursor.execute('INSERT INTO Mesure VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                       (datetime.now(), datetime.now(), 'Site001', 'NO2', 'Discriminant1', 'Reglementaire1', 'Evaluation1',
-                        'ProcedureMesure1', 'TypeValeur1', 10.5, 9.8, 'Unite1', 'TauxSaisie1', 'Temporelle1', 'Donnees1',
-                        'Qualite1', 1))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Erreur lors de l'ajout de données :", e)
-    finally:
-        conn.close()
+class DatabaseManager:
+    def __init__(self, database_file):
+        self.conn = sqlite3.connect(database_file)
+        self.cur = self.conn.cursor()
 
-def add_bad_data():
-    conn = sqlite3.connect(DATABASE_NAME)
-    try:
-        # Ajout de données incorrectes (par exemple, avec des champs vides)
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO Mesure VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                       (datetime.now(), datetime.now(), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Erreur lors de l'ajout de mauvaises données :", e)
-    finally:
-        conn.close()
+    def insert_site(self, site_data):
+        try:
+            self.cur.execute("INSERT INTO Site VALUES (?, ?, ?, ?, ?)", (site_data['codeSite'], site_data['nomSite'], site_data['typeImplantation'], site_data['typeInfluence'], site_data['codeZas']))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error inserting site: {e}")
+            return False
 
-def add_incoherent_data():
-    conn = sqlite3.connect(DATABASE_NAME)
-    try:
-        # Ajout de données incohérentes (par exemple, une date de fin antérieure à la date de début)
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO Mesure VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                       (datetime.now(), datetime.now(), 'Site001', 'NO2', 'Discriminant1', 'Reglementaire1', 'Evaluation1',
-                        'ProcedureMesure1', 'TypeValeur1', 10.5, 9.8, 'Unite1', 'TauxSaisie1', 'Temporelle1', 'Donnees1',
-                        'Qualite1', 1))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Erreur lors de l'ajout de données incohérentes :", e)
-    finally:
-        conn.close()
+    def get_site(self, code_site):
+        self.cur.execute("SELECT * FROM Site WHERE codeSite=?", (code_site,))
+        site = self.cur.fetchone()
+        if site:
+            columns = [description[0] for description in self.cur.description]
+            return dict(zip(columns, site))
+        else:
+            return None
 
-def main():
-    # Exécutez des exemples de fonctions ici si nécessaire
-    pass
+    def delete_site(self, code_site):
+        try:
+            self.cur.execute("DELETE FROM Site WHERE codeSite=?", (code_site,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error deleting site: {e}")
+            return False
 
-if __name__ == "__main__":
-    main()
+    def insert_organisme(self, organisme_data):
+        try:
+            self.cur.execute("INSERT INTO Organisme VALUES (?)", (organisme_data['nomOrganisme'],))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error inserting organisme: {e}")
+            return False
+
+    def insert_mesure(self, mesure_data):
+        # Implementer l'insertion pour la table "Mesure" de manière similaire
+        pass
+
+    # ... autres méthodes pour interagir avec la base de données
+
+# test_database_manager.py
+
+import pytest
+from database_manager import DatabaseManager
+
+DATABASE_FILE = 'base_de_donnee_air_test.db'
+
+@pytest.fixture
+def database_manager():
+    return DatabaseManager(DATABASE_FILE)
+
+# Les tests restent inchangés
+# Assurez-vous d'adapter le fichier "test_database_manager.py" en fonction de l'implémentation réelle de votre classe DatabaseManager.
