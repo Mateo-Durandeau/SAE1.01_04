@@ -1,6 +1,5 @@
 Voici une version révisée et améliorée de votre fichier `README.md`, avec une structure et une formulation plus professionnelles :
 
-```markdown
 # Gestion de Données Geod'air - SAE 1.01_04
 **Auteur :** Durandeau Matéo  
 **Formation :** BUT Informatique
