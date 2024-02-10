@@ -36,7 +36,7 @@ Pour télécharger les données et les insérer dans votre base de données, ex�
 Pour démarrer le serveur Flask et accéder à l'interface web :
 
 ```bash
-python app.py
+python app.py ip: http://127.0.0.0
 ```
 
 Veillez à ce que le nom de votre base de données soit correctement renseigné dans les variables du script.
